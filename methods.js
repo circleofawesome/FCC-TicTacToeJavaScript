@@ -42,5 +42,36 @@ function winnerFinder(player,boxObj){
 	}
 }
 
+
+
 //COMPUTER AI FUNCTIONS BELOW 
+
+var winningCombos=[[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]];
+
+var humanChoices=[1,5];//the values here are for testing, in the actual game they'll be set as the human player makes his choices 
+
+//returns the combo that needs blocking if AI should attempt to block the human from winning
+function blockInitiate(choices,combos){
+	for(var i=0;i<combos.length;i++){
+		var count=0;
+		for(var m=0;m<choices.length;m++){
+			if(combos[i].includes(choices[m])){
+				count+=1;
+				if(count===2){
+					return combos[i];
+				}
+			}
+		}
+	}
+	return null;
+}
+
+//takes the combo that needs to be blocked and the player's choices and returns the number that needs to be blocked ex: (1,3)==>[1,2,3]==>2
+function blocker(combo,choices){
+	for(var i=0;i<combo.length;i++){
+		if(choices.includes(combo[i])===false){
+			return combo[i];
+		}
+	}
+}
 
