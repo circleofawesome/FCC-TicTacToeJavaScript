@@ -82,3 +82,11 @@ function blocker(combo,choices){
 }
 //THIS NEEDS TO BE FIXED 
 
+//takes array of combos that need blocking and human choices and returns an array with all the possible places to put a piece 
+function boxChooser(needsBlocking,choices){
+	var chosenBoxes=[];
+	for(var i=0;i<needsBlocking.length;i++){
+		chosenBoxes.push(blocker(needsBlocking[i],choices));
+	}
+	return chosenBoxes;
+}
