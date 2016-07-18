@@ -3,7 +3,15 @@ var userChoice=prompt("Please enter X or O");
 while((userChoice!=='X')&&(userChoice!=='O')){
 	userChoice=prompt("Please enter X or O");
 }
-console.log(userChoice);//test
+var compChoice;
+if(userChoice==='X'){
+	compChoice="O";
+}
+else{
+	compChoice="X";
+}
+console.log("user picked: "+userChoice);//test
+console.log("computer picked: "+compChoice);//test
 
 var boxes={
 	//each box is numbered, starting from top going clockwise, they're all initially empty
@@ -29,6 +37,41 @@ function boxUpdate(boxNum){
 	document.getElementById(boxNum).style.color="black";
 	boxes[boxNum]=userChoice;
 	//console.log(boxes);//test
+	//at this point the computer will make a choice on the box based on what the user chose, thus run the computer choice functions here
+}
+
+//computer makes a choice right after the user makes their choice 
+function computerMakesChoice(){
 }
 
 
+//takes X or O, the boxes object and determines if that player is a winner
+function winnerFinder(player,boxObj){
+	if((boxObj[1]===player)&&(boxObj[2]===player)&&(boxObj[3]===player)){
+		return "winner";
+	}
+	else if((boxObj[4]===player)&&(boxObj[5]===player)&&(boxObj[6]===player)){
+		return "winner";
+	}
+	else if((boxObj[7]===player)&&(boxObj[8]===player)&&(boxObj[9]===player)){
+		return "winner";
+	}
+	else if((boxObj[1]===player)&&(boxObj[4]===player)&&(boxObj[7]===player)){
+		return "winner";
+	}
+	else if((boxObj[2]===player)&&(boxObj[5]===player)&&(boxObj[8]===player)){
+		return "winner";
+	}
+	else if((boxObj[3]===player)&&(boxObj[6]===player)&&(boxObj[9]===player)){
+		return "winner";
+	}
+	else if((boxObj[1]===player)&&(boxObj[5]===player)&&(boxObj[9]===player)){
+		return "winner";
+	}
+	else if((boxObj[3]===player)&&(boxObj[5]===player)&&(boxObj[7]===player)){
+		return "winner";
+	}
+	else{
+		return "loser";
+	}
+}
