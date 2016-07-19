@@ -18,6 +18,28 @@
 	cursor: default;
 }
 
+.middle-buffer{
+	height: 10%;
+}
+
 .winner{
 	text-align: center;
+}
+
+.start{
+	background-color: black;
+}
+.start:hover{
+	background-color: white;
+	color: black;
+}
+.start:active{
+	background-color: black;
+}
+.start:visited{
+	background-color: black;
+}
+.start:focus{
+	background-color: black;
+	color: white;
 }

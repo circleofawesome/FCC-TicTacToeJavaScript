@@ -71,6 +71,8 @@ function blockInitiate(choices,combos){
 	}
 	return needsToBeBlocked;
 }
+//if this function is given computerChoices instead of human choices it returns the possible winning moves
+
 
 //takes the combo that needs to be blocked and the player's choices and returns the number that needs to be blocked ex: (1,3)==>[1,2,3]==>2
 function blocker(combo,choices){

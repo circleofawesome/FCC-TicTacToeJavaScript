@@ -10,6 +10,11 @@ var boxes={
 	8:"empty",
 	9:"empty"
 };
+var winningCombos=[[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]];
+
+var listOfUserChoices=[];
+var listOfCompChoices=[];
+var listOfOccupiedBoxes=[];
 
 var userChoice=prompt("Please enter X or O");
 
@@ -26,12 +31,11 @@ else{
 console.log("user picked: "+userChoice);//test
 console.log("computer picked: "+compChoice);//test
 //first computerchoice goes here
-test();
+
 
 //takes the users choice and appends it to the box he clicks on
 function boxUpdate(boxNum){
 	//console.log(boxNum); //test
-	document.getElementById("9").innerHTML = "New text!";
 	boxNum=parseInt(boxNum);
 	if(boxes[boxNum]!=="empty"){
 		return null;
@@ -39,6 +43,9 @@ function boxUpdate(boxNum){
 	document.getElementById(boxNum).innerHTML=userChoice;
 	document.getElementById(boxNum).style.color="black";
 	boxes[boxNum]=userChoice;
+	listOfUserChoices.push(boxNum);
+	listOfOccupiedBoxes.push(boxNum);
+	console.log(listOfUserChoices);//test
 	//console.log(boxes);//test
 	//winner finder checks to see if after user made their box choice if he won
 	if(winnerFinder(userChoice,boxes)==="winner"){
@@ -50,6 +57,13 @@ function boxUpdate(boxNum){
 
 //computer makes a choice right after the user makes their choice 
 function computerMakesChoice(){
+	//check first to see if there's a winning move somewhere
+	var compCombos=blockInitiate(listOfCompChoices,winningCombos);
+	if(compCombos.length>0){
+		
+	}
+	//check first to see if a box needs blocking, else pick a corner box
+	var userCombos=blockInitiate(listOfUserChoices,winningCombos);
 
 }
 
@@ -101,15 +115,49 @@ function winner(userOrComp){
 	}
 }
 
-//first computer choice
-function firstComputerChoice(){
+//begins the game with the computer's first choice
+function startGame(){
 	var choice=cornerPicker();
+	while(listOfOccupiedBoxes.includes(choice)){
+		choice=cornerPicker();
+	}
 	boxes[choice]=compChoice;
-	//document.getElementById("winner").innerHTML="2";
+	listOfCompChoices.push(choice);
+	listOfOccupiedBoxes.push(choice);
+	console.log(listOfCompChoices);//test
+	document.getElementById(choice).innerHTML=compChoice;
+	document.getElementById(choice).style.color="black";
 	console.log("the computer picked box "+choice);//test
 }
 
-function test(){
-	//document.getElementById("9").innerHTML = "New text!";
-	console.log("wtf test");
+//returns an array of the combos that need blocking if AI should attempt to block the human from winning
+function blockInitiate(choices,combos){
+	var needsToBeBlocked=[];
+	for(var i=0;i<combos.length;i++){
+		var count=0;
+		for(var m=0;m<choices.length;m++){
+			if(combos[i].includes(choices[m])){
+				count+=1;
+				if(count===2){
+					//return combos[i];
+					needsToBeBlocked.push(combos[i]);
+					break;
+				}
+			}
+		}
+	}
+	if(needsToBeBlocked.length===0){
+		return null;
+	}
+	return needsToBeBlocked;
+}
+//if this function is given computerChoices instead of human choices it returns the possible winning moves
+
+//takes the combo that needs to be blocked and the player's choices and returns the number that needs to be blocked ex: (1,3)==>[1,2,3]==>2
+function blocker(combo,choices){
+	for(var i=0;i<combo.length;i++){
+		if(choices.includes(combo[i])===false){
+			return combo[i];
+		}
+	}
 }
