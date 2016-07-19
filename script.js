@@ -1,3 +1,5 @@
+var startButtonStatus=true;
+var boxUpdateStatus=false;
 var boxes={
 	//each box is numbered, starting from top going clockwise, they're all initially empty
 	1:"empty",
@@ -36,7 +38,14 @@ console.log("computer picked: "+compChoice);//test
 
 //takes the users choice and appends it to the box he clicks on
 function boxUpdate(boxNum){
+	if(boxUpdateStatus===false){
+		return null;
+	}
 	//console.log(boxNum); //test
+	if(listOfOccupiedBoxes.length===9){
+		document.getElementById('winner').innerHTML="It's a tie!";
+		return console.log("fin");//test
+	}
 	boxNum=parseInt(boxNum);
 	if(boxes[boxNum]!=="empty"){
 		return null;
@@ -60,12 +69,28 @@ function boxUpdate(boxNum){
 	}
 	//at this point the computer will make a choice on the box based on what the user chose, thus run the computer choice functions here
 	computerMakesChoice();
+	if(listOfOccupiedBoxes.length===9){
+		document.getElementById('winner').innerHTML="It's a tie!";
+		return console.log("fin");//test
+	}
+	if(winnerFinder(compChoice,boxes)==="winner"){
+		return winner("computer");
+	}
 	
 }
 
 //computer makes a choice right after the user makes their choice 
 function computerMakesChoice(){
+	//first checks for tie
 	//first computer must check for a possible winning box, then we check to see if there's a block required
+	var winThisBox=allPossibleBoxes(blockInitiate(listOfCompChoices,winningCombos),listOfCompChoices);
+	if(winThisBox!==null){
+		for(var i=0;i<winThisBox.length;i++){
+			if(listOfOccupiedBoxes.includes(winThisBox[i])===false){
+				return updateBox(winThisBox[i],compChoice);
+			}
+		}
+	}
 	//first block initiate must be run to check for blocks
 	var blockThisBox=allPossibleBoxes(blockInitiate(listOfUserChoices,winningCombos),listOfUserChoices);
 	console.log("boxes the computer must block: "+blockThisBox);//test
@@ -153,6 +178,20 @@ function startGame(){
 	document.getElementById(choice).innerHTML=compChoice;
 	document.getElementById(choice).style.color="black";
 	console.log("the computer picked box "+choice);//test
+}
+
+//startGame version 2, actually begins the game with computer's first choice, then becomes inactive
+function actualStartGame(){
+	boxUpdateStatus=true;
+	if(startButtonStatus){
+		startButtonStatus=false;
+		document.getElementById("start").innerHTML="New Game";
+		return startGame();
+	}
+	else{
+		startButtonStatus=false;
+		location.reload();
+	}
 }
 
 //returns an array of the combos that need blocking if AI should attempt to block the human from winning
