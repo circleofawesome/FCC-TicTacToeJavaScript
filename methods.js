@@ -91,3 +91,10 @@ function allPossibleBoxes(needsBlocking,choices){
 	return chosenBoxes;
 }
 
+
+
+//returns a corner choice (1,3,7,9)
+function cornerPicker(){
+	var corners=[1,3,7,9];
+	return corners[Math.floor((Math.random() * 4) + 0)];
+}
