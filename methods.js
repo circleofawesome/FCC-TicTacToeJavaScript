@@ -76,16 +76,22 @@ function blockInitiate(choices,combos){
 
 //takes the combo that needs to be blocked and the player's choices and returns the number that needs to be blocked ex: (1,3)==>[1,2,3]==>2
 function blocker(combo,choices){
+	if(combo===null){
+		return null;
+	}
 	for(var i=0;i<combo.length;i++){
 		if(choices.includes(combo[i])===false){
 			return combo[i];
 		}
 	}
 }
-//THIS NEEDS TO BE FIXED 
+
 
 //takes array of combos that need blocking and human choices and returns an array with all the possible places to put a piece 
 function allPossibleBoxes(needsBlocking,choices){
+	if(needsBlocking===null){
+		return null;
+	}
 	var chosenBoxes=[];
 	for(var i=0;i<needsBlocking.length;i++){
 		chosenBoxes.push(blocker(needsBlocking[i],choices));
@@ -99,4 +105,15 @@ function allPossibleBoxes(needsBlocking,choices){
 function cornerPicker(){
 	var corners=[1,3,7,9];
 	return corners[Math.floor((Math.random() * 4) + 0)];
+}
+
+//takes a choice and computer piece(X or O) updates the box on the html page
+function updateBox(choice,compPiece){
+	boxes[choice]=compPiece;
+	listOfCompChoices.push(choice);
+	listOfOccupiedBoxes.push(choice);
+	console.log("list of comp choices: "+listOfCompChoices);//test
+	document.getElementById(choice).innerHTML=compPiece;
+	document.getElementById(choice).style.color="black";
+	console.log("the computer picked box "+choice);//test
 }

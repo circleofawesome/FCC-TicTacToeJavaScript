@@ -44,8 +44,10 @@ function boxUpdate(boxNum){
 	document.getElementById(boxNum).innerHTML=userChoice;
 	document.getElementById(boxNum).style.color="black";
 
-	cornerBoxes.splice(cornerBoxes.indexOf(boxNum),1);
-	console.log("user picked a corner box: "+ cornerBoxes);//test
+	if(cornerBoxes.includes(boxNum)){
+		cornerBoxes.splice(cornerBoxes.indexOf(boxNum),1);
+	}
+
 	boxes[boxNum]=userChoice;
 	listOfUserChoices.push(boxNum);
 	listOfOccupiedBoxes.push(boxNum);
@@ -58,16 +60,29 @@ function boxUpdate(boxNum){
 	}
 	//at this point the computer will make a choice on the box based on what the user chose, thus run the computer choice functions here
 	computerMakesChoice();
-	//!!!!!!!!!!!PICK UP FROM HERE
+	
 }
 
 //computer makes a choice right after the user makes their choice 
 function computerMakesChoice(){
+	//first computer must check for a possible winning box, then we check to see if there's a block required
+	//first block initiate must be run to check for blocks
+	var blockThisBox=allPossibleBoxes(blockInitiate(listOfUserChoices,winningCombos),listOfUserChoices);
+	console.log("boxes the computer must block: "+blockThisBox);//test
+	if(blockThisBox!==null){
+		for(var i=0;i<blockThisBox.length;i++){
+			if(listOfOccupiedBoxes.includes(blockThisBox[i])===false){
+				return updateBox(blockThisBox[i],compChoice);
+			}
+		}
+	}
 	if(cornerBoxes.length>0){
 		return startGame();
 		//return null;
 	}
 	else{
+		console.log("here");//test
+		console.log(cornerBoxes.length);//test
 		return null;
 	}
 }
@@ -134,7 +149,7 @@ function startGame(){
 	boxes[choice]=compChoice;
 	listOfCompChoices.push(choice);
 	listOfOccupiedBoxes.push(choice);
-	console.log(listOfCompChoices);//test
+	console.log("list of comp choices: "+listOfCompChoices);//test
 	document.getElementById(choice).innerHTML=compChoice;
 	document.getElementById(choice).style.color="black";
 	console.log("the computer picked box "+choice);//test
@@ -162,3 +177,38 @@ function blockInitiate(choices,combos){
 	return needsToBeBlocked;
 }
 //if this function is given computerChoices instead of human choices it returns the possible winning moves
+
+//takes the combo that needs to be blocked and the player's choices and returns the number that needs to be blocked ex: (1,3)==>[1,2,3]==>2
+function blocker(combo,choices){
+	if(combo===null){
+		return null;
+	}
+	for(var i=0;i<combo.length;i++){
+		if(choices.includes(combo[i])===false){
+			return combo[i];
+		}
+	}
+}
+
+//takes array of combos that need blocking and human choices and returns an array with all the possible places to put a piece 
+function allPossibleBoxes(needsBlocking,choices){
+	if(needsBlocking===null){
+		return null;
+	}
+	var chosenBoxes=[];
+	for(var i=0;i<needsBlocking.length;i++){
+		chosenBoxes.push(blocker(needsBlocking[i],choices));
+	}
+	return chosenBoxes;
+}
+
+//takes a choice and computer piece(X or O) updates the box on the html page
+function updateBox(choice,compPiece){
+	boxes[choice]=compPiece;
+	listOfCompChoices.push(choice);
+	listOfOccupiedBoxes.push(choice);
+	console.log("list of comp choices: "+listOfCompChoices);//test
+	document.getElementById(choice).innerHTML=compPiece;
+	document.getElementById(choice).style.color="black";
+	console.log("the computer picked box "+choice);//test
+}
