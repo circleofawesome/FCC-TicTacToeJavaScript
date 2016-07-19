@@ -11,6 +11,7 @@ var boxes={
 	9:"empty"
 };
 var winningCombos=[[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]];
+var cornerBoxes=[1,3,7,9];
 
 var listOfUserChoices=[];
 var listOfCompChoices=[];
@@ -42,29 +43,33 @@ function boxUpdate(boxNum){
 	}
 	document.getElementById(boxNum).innerHTML=userChoice;
 	document.getElementById(boxNum).style.color="black";
+
+	cornerBoxes.splice(cornerBoxes.indexOf(boxNum),1);
+	console.log("user picked a corner box: "+ cornerBoxes);//test
 	boxes[boxNum]=userChoice;
 	listOfUserChoices.push(boxNum);
 	listOfOccupiedBoxes.push(boxNum);
 	console.log(listOfUserChoices);//test
 	//console.log(boxes);//test
 	//winner finder checks to see if after user made their box choice if he won
+	
 	if(winnerFinder(userChoice,boxes)==="winner"){
 		return winner("user");
 	}
 	//at this point the computer will make a choice on the box based on what the user chose, thus run the computer choice functions here
-
+	computerMakesChoice();
+	//!!!!!!!!!!!PICK UP FROM HERE
 }
 
 //computer makes a choice right after the user makes their choice 
 function computerMakesChoice(){
-	//check first to see if there's a winning move somewhere
-	var compCombos=blockInitiate(listOfCompChoices,winningCombos);
-	if(compCombos.length>0){
-		
+	if(cornerBoxes.length>0){
+		return startGame();
+		//return null;
 	}
-	//check first to see if a box needs blocking, else pick a corner box
-	var userCombos=blockInitiate(listOfUserChoices,winningCombos);
-
+	else{
+		return null;
+	}
 }
 
 
@@ -120,7 +125,12 @@ function startGame(){
 	var choice=cornerPicker();
 	while(listOfOccupiedBoxes.includes(choice)){
 		choice=cornerPicker();
+		if(cornerBoxes.length<1){
+			return null;
+		}
 	}
+	cornerBoxes.splice(cornerBoxes.indexOf(choice),1);
+	console.log("cornerBoxes remaining: "+cornerBoxes+" and the length is "+cornerBoxes.length);//test
 	boxes[choice]=compChoice;
 	listOfCompChoices.push(choice);
 	listOfOccupiedBoxes.push(choice);
@@ -152,12 +162,3 @@ function blockInitiate(choices,combos){
 	return needsToBeBlocked;
 }
 //if this function is given computerChoices instead of human choices it returns the possible winning moves
-
-//takes the combo that needs to be blocked and the player's choices and returns the number that needs to be blocked ex: (1,3)==>[1,2,3]==>2
-function blocker(combo,choices){
-	for(var i=0;i<combo.length;i++){
-		if(choices.includes(combo[i])===false){
-			return combo[i];
-		}
-	}
-}
