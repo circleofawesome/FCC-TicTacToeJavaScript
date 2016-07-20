@@ -1,0 +1,1 @@
+The game works as intended but the code is very redundant and full of comments/console log tests. I could write more functions and remove the redundencies and clean everything up but I'm strapped for time.
