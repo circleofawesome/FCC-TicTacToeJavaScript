@@ -8,6 +8,7 @@
 	border:solid;
 	border-color: black;
 	color:white;
+	font-family: 'Sigmar One', cursive;
 	-webkit-user-select: none; /* Chrome/Safari */        
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+ */
@@ -24,10 +25,12 @@
 
 .winner{
 	text-align: center;
+	font-family: 'Stalinist One', cursive;
 }
 
 .start{
 	background-color: black;
+	font-family: 'Stalinist One', cursive;
 }
 .start:hover{
 	background-color: white;
@@ -45,6 +48,7 @@
 }
 
 .winner{
+	font-family: 'Stalinist One', cursive;
 	font-size: 70px;
 	text-align: center;
 	color: black;
